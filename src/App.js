@@ -1,11 +1,13 @@
 import "./App.css";
 import { useState, useCallback, useEffect } from "react";
 
-const FALA_PORTUGUES_API_URL = "http://localhost:4000/api";
+const FALA_PORTUGUES_API_URL = process.env.REACT_APP_FALA_PORTUGUES_API_URL;
 
 function App() {
   const [noun, setNoun] = useState(null);
   const [adjective, setAdjective] = useState(null);
+  console.log(adjective, noun)
+  console.log(FALA_PORTUGUES_API_URL);
 
   const fetchNoun = useCallback(async () => {
     const nounResponse = await fetch(`${FALA_PORTUGUES_API_URL}/trend-noun`);
@@ -46,8 +48,8 @@ function App() {
 
           <div className="flex flex-col mt-12 gap-2 lg:gap-6 max-w-lg">
             <div className="flex gap-2 lg:gap-6">
-              <Button onClick={fetchAdjective}>Update Adjective</Button>
-              <Button onClick={fetchNoun}>Update Noun</Button>
+              <Button onClick={fetchAdjective}>Novo adjetivo</Button>
+              <Button onClick={fetchNoun}>Novo substantivo</Button>
             </div>
 
             <Button
@@ -56,7 +58,7 @@ function App() {
                 fetchAdjective();
               }}
             >
-              New trend
+              Nova trend
             </Button>
           </div>
         </main>
@@ -65,7 +67,8 @@ function App() {
           <span>
             Created by{" "}
             <Link href="https://www.github.com/jmoicano">@JMoicano</Link> and{" "}
-            <Link href="https://www.github.com/savioserra">@savioserra</Link>
+            <Link href="https://www.github.com/savioserra">@savioserra</Link> and{" "}
+            <Link href="https://github.com/jlhmtt">@Juli</Link>
           </span>
 
           <span>☭</span>
