@@ -56,7 +56,7 @@ function App() {
         {adjective} {noun}
       </WordContainer>
 
-      <div className="transition-all flex flex-col mt-12 gap-2 lg:gap-6 w-6/12">
+      <div className="flex flex-col mt-12 gap-2 lg:gap-6 w-6/12">
         <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
           <Button
             className="flex-1"
@@ -87,9 +87,9 @@ function WordContainer({ children, className }) {
   return (
     <h1
       className={classNames(
-        abril.className,
         className,
-        "text-3xl lg:text-8xl text-center px-4 my-8 lg:py-4 rounded lg:rounded-xl text-white"
+        abril.className,
+        "transition-all text-3xl lg:text-8xl text-center px-4 my-8 lg:py-4 rounded lg:rounded-xl text-white"
       )}
     >
       {children}
