@@ -89,7 +89,7 @@ function WordContainer({ children, className }) {
       className={classNames(
         abril.className,
         className,
-        "text-4xl lg:text-8xl px-4 my-8 lg:py-4 rounded lg:rounded-xl text-white"
+        "text-3xl lg:text-8xl text-center px-4 my-8 lg:py-4 rounded lg:rounded-xl text-white"
       )}
     >
       {children}
