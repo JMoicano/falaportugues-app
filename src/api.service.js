@@ -13,7 +13,9 @@ export const fetchAdjective = async () => {
 
 export const fetchNoun = async () => {
   return new Promise((resolve) => {
-    const [noun] = nouns.sort(() => random(-1, 1, false));
-    setTimeout(() => resolve(noun), random(0, 2e3, false));
+    setTimeout(
+      () => resolve(nouns[random(0, nouns.length, false)]),
+      random(0, 1e3, false)
+    );
   });
 };
