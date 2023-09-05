@@ -102,7 +102,7 @@ function Button({ children, className, ...props }) {
     <button
       className={classNames(
         className,
-        "transition-all opacity-100 text-white hover:text-slate-900 border-white hover:bg-cyan-400 text-sm lg:text-lg border rounded lg:rounded-lg border-transparent hover:border-cyan-300 px-4 py-2 shadow-lg shadow-slate-900"
+        "transition-all opacity-100 text-white hover:text-slate-900 border-white hover:bg-cyan-400 text-sm lg:text-lg border rounded lg:rounded-lg border-transparent hover:border-cyan-300 px-4 py-2"
       )}
       {...props}
     >
