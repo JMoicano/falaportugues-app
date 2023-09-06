@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="h-screen bg-slate-950">
+        <div className="h-screen bg-gradient-to-b from-slate-700 to-slate-800">
           <div className="flex flex-col h-full overflow-hidden">
             <header
               className={classNames(

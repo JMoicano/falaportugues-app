@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import { useState, useCallback, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import * as apiService from "../api.service";
 import { abril, rajdhani } from "./fonts";
@@ -38,7 +39,15 @@ function App() {
   }, []);
 
   const fetchAll = useCallback(
-    withLoader(() => Promise.all([fetchNoun(), fetchAdjective()])),
+    withLoader(async () => {
+      const [noun, adjective] = await Promise.all([
+        apiService.fetchNoun(),
+        apiService.fetchAdjective(),
+      ]);
+
+      setNoun(noun);
+      setAdjective(adjective);
+    }),
     [withLoader, fetchNoun, fetchAdjective]
   );
 
@@ -52,11 +61,38 @@ function App() {
         A nova tendência do mercado é:
       </span>
 
-      <WordContainer className={classNames({ "opacity-0": isLoading })}>
-        {adjective} {noun}
+      <WordContainer>
+        <AnimatePresence mode="popLayout" presenceAffectsLayout>
+          <motion.span
+            layout
+            key={adjective}
+            className="inline-block"
+            exit={{ y: "20%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            initial={{ y: "-20%", opacity: 0 }}
+          >
+            {adjective}
+          </motion.span>
+          <span> </span>
+          <motion.span
+            layout
+            key={noun}
+            className="inline-block"
+            exit={{ y: "20%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            initial={{ y: "-20%", opacity: 0 }}
+          >
+            {noun}
+          </motion.span>
+        </AnimatePresence>
       </WordContainer>
 
-      <div className="flex flex-col mt-12 gap-2 lg:gap-6 w-6/12">
+      <div
+        className={classNames(
+          "transition-all opacity-100 flex flex-col mt-12 gap-2 lg:gap-6 w-6/12 2xl:w-4/12",
+          { "opacity-5": isLoading }
+        )}
+      >
         <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
           <Button
             className="flex-1"
@@ -89,7 +125,7 @@ function WordContainer({ children, className }) {
       className={classNames(
         className,
         abril.className,
-        "transition-all text-3xl lg:text-8xl text-center px-4 my-8 lg:py-4 rounded lg:rounded-xl text-white"
+        "text-3xl lg:text-8xl text-center px-4 my-8 lg:py-4 rounded lg:rounded-xl text-white lowercase"
       )}
     >
       {children}
@@ -102,7 +138,7 @@ function Button({ children, className, ...props }) {
     <button
       className={classNames(
         className,
-        "transition-all opacity-100 text-white hover:text-slate-900 border-white hover:bg-cyan-400 text-sm lg:text-lg border rounded lg:rounded-lg border-transparent hover:border-cyan-300 px-4 py-2"
+        "transition-all text-white hover:text-slate-900 border-white hover:bg-cyan-400 text-sm lg:text-lg border rounded lg:rounded-lg border-transparent hover:border-cyan-300 px-4 py-2"
       )}
       {...props}
     >
