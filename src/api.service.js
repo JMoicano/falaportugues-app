@@ -7,15 +7,18 @@ export const fetchAdjective = async () => {
     cache: "no-store",
   });
 
-  const [adjective] = await response.json();
-  return adjective;
+  const adjectives = await response.json();
+  return adjectives.slice(0, 3);
 };
 
 export const fetchNoun = async () => {
   return new Promise((resolve) => {
-    setTimeout(
-      () => resolve(nouns[random(0, nouns.length - 1, false)]),
-      random(0, 1e3, false)
-    );
+    const randomizedResults = [
+      ...Array.from({ length: 3 }).map(
+        () => nouns[random(0, nouns.length - 1, false)]
+      ),
+    ];
+
+    setTimeout(() => resolve(randomizedResults), random(0, 1e3, false));
   });
 };

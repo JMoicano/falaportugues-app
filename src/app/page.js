@@ -7,53 +7,50 @@ import { AnimatePresence, motion } from "framer-motion";
 import * as apiService from "../api.service";
 import { abril, rajdhani } from "./fonts";
 
+const bufferThresholder = 2;
+
 function App() {
-  const [noun, setNoun] = useState("");
-  const [adjective, setAdjective] = useState("");
+  const [nounsBuffer, setNoun] = useState([]);
+  const [adjectivesBuffer, setAdjective] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const nextNoun = () => setNoun(([, ...prev]) => prev);
+  const nextAdjective = () => setAdjective(([, ...prev]) => prev);
 
-  const withLoader = useCallback(
-    (worker) => async () => {
-      setIsLoading(true);
+  useEffect(() => {
+    if (adjectivesBuffer.length <= bufferThresholder) {
+      apiService
+        .fetchAdjective()
+        .then((adjectives) => setAdjective((prev) => [...prev, ...adjectives]));
+    }
+  }, [adjectivesBuffer]);
 
-      try {
-        return await worker();
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
+  useEffect(() => {
+    if (nounsBuffer.length <= bufferThresholder) {
+      apiService
+        .fetchNoun()
+        .then((nouns) => setNoun((prev) => [...prev, ...nouns]));
+    }
+  }, [nounsBuffer]);
 
-  const fetchAdjective = useCallback(async () => {
-    const adjective = await apiService.fetchAdjective();
-    setAdjective(adjective);
-    return adjective;
+  const fetchAll = useCallback(async () => {
+    const [nouns, adjectives] = await Promise.all([
+      apiService.fetchNoun(),
+      apiService.fetchAdjective(),
+    ]);
+
+    setNoun(nouns);
+    setAdjective(adjectives);
   }, []);
-
-  const fetchNoun = useCallback(async () => {
-    const noun = await apiService.fetchNoun();
-    setNoun(noun);
-    return noun;
-  }, []);
-
-  const fetchAll = useCallback(
-    withLoader(async () => {
-      const [noun, adjective] = await Promise.all([
-        apiService.fetchNoun(),
-        apiService.fetchAdjective(),
-      ]);
-
-      setNoun(noun);
-      setAdjective(adjective);
-    }),
-    [withLoader, fetchNoun, fetchAdjective]
-  );
 
   useEffect(() => {
     fetchAll();
   }, [fetchAll]);
+
+  const currentNoun = nounsBuffer[0];
+  const currentAdjective = adjectivesBuffer[0];
+
+  const isWaitingBuffer =
+    nounsBuffer.length <= 1 || adjectivesBuffer.length <= 1;
 
   return (
     <>
@@ -65,53 +62,57 @@ function App() {
         <AnimatePresence mode="popLayout" presenceAffectsLayout>
           <motion.span
             layout
-            key={adjective}
+            key={currentAdjective}
             className="inline-block"
-            exit={{ y: "20%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "20%", opacity: 0 }}
             initial={{ y: "-20%", opacity: 0 }}
           >
-            {adjective}
+            {currentAdjective}
           </motion.span>
           <span> </span>
           <motion.span
             layout
-            key={noun}
+            key={currentNoun}
             className="inline-block"
-            exit={{ y: "20%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "20%", opacity: 0 }}
             initial={{ y: "-20%", opacity: 0 }}
           >
-            {noun}
+            {currentNoun}
           </motion.span>
         </AnimatePresence>
       </WordContainer>
 
       <div
         className={classNames(
-          "transition-all opacity-100 flex flex-col mt-12 gap-2 lg:gap-6 w-6/12 2xl:w-4/12",
-          { "opacity-5": isLoading }
+          { "opacity-5": isWaitingBuffer },
+          "transition-all opacity-100 flex flex-col mt-12 gap-2 lg:gap-6 w-6/12 2xl:w-4/12"
         )}
       >
         <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
           <Button
             className="flex-1"
-            disabled={isLoading}
-            onClick={withLoader(fetchAdjective)}
+            disabled={isWaitingBuffer}
+            onClick={() => nextAdjective()}
           >
             Novo adjetivo
           </Button>
 
           <Button
             className="flex-1"
-            disabled={isLoading}
-            onClick={withLoader(fetchNoun)}
+            onClick={() => nextNoun()}
+            disabled={isWaitingBuffer}
           >
             Novo substantivo
           </Button>
         </div>
 
-        <Button className="flex-1" onClick={fetchAll} disabled={isLoading}>
+        <Button
+          className="flex-1"
+          onClick={() => fetchAll()}
+          disabled={isWaitingBuffer}
+        >
           Nova trend
         </Button>
       </div>
