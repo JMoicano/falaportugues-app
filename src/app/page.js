@@ -67,7 +67,7 @@ function App() {
       <Head>
         <meta
           property="og:image"
-          content={`https://placehold.co/600x400/EEE/31343C?font=playfair-display&text=${currentAdjective}%20%${currentNoun}`}
+          content={`/api/og?adjective=${currentAdjective}&noun=${currentNoun}`}
         />
       </Head>
 
