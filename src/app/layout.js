@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/react";
+
 import classNames from "classnames";
 
 import { rajdhani } from "./fonts";
@@ -40,6 +42,8 @@ export default function RootLayout({ children }) {
             </footer>
           </div>
         </div>
+
+        <Analytics />
       </body>
     </html>
   );

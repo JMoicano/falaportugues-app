@@ -7,7 +7,7 @@ import { useState, useEffect, startTransition } from "react";
 import * as apiService from "../api.service";
 import { abril, rajdhani } from "./fonts";
 
-const bufferThresholder = 2;
+const bufferThresholder = 6;
 
 function App() {
   const [nounsBuffer, setNounsBuffer] = useState([]);
@@ -58,7 +58,12 @@ function App() {
     <>
       <span className={rajdhani.className}>A nova tendência do mercado é:</span>
 
-      <WordContainer>
+      <h1
+        className={classNames(
+          abril.className,
+          "text-3xl lg:text-8xl text-center my-12 lg:my-24 lg:py-4 text-white lowercase mx-6"
+        )}
+      >
         <motion.span
           layout
           key={currentAdjective}
@@ -80,7 +85,7 @@ function App() {
         >
           {currentNoun}
         </motion.span>
-      </WordContainer>
+      </h1>
 
       <div
         className={classNames(
@@ -116,20 +121,6 @@ function App() {
         </div>
       </div>
     </>
-  );
-}
-
-function WordContainer({ children, className }) {
-  return (
-    <h1
-      className={classNames(
-        className,
-        abril.className,
-        "text-3xl lg:text-8xl text-center my-12 lg:my-24 lg:py-4 text-white lowercase mx-6"
-      )}
-    >
-      {children}
-    </h1>
   );
 }
 
