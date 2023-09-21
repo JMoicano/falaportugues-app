@@ -37,7 +37,7 @@ function App() {
   const onShare = () => {
     navigator.share?.({
       url: "https://falaportugues.vercel.app",
-      text: `A nova tendência de mercado é: ${currentAdjective} ${currentNoun}`,
+      text: `A nova tendência de mercado é: ${currentAdjective} ${currentNoun}.\nDescubra você também o que mais o mercado reserva:`,
     });
   };
 
