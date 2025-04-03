@@ -8,7 +8,7 @@ export const fetchAdjective = async () => {
   });
 
   const adjectives = await response.json();
-  return adjectives.slice(0, 3);
+  return adjectives.slice(0, 3).map((res) => res.word);
 };
 
 export const fetchNoun = async () => {
